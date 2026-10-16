@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}ログイン | うさぎマーケット{% endblock %}
+{% block content %}
+<div class="box">
+  <h2>ログイン</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="post">
+    <label>ユーザー名<input type="text" name="username" required></label>
+    <label>パスワード<input type="password" name="password" required></label>
+    <button type="submit" class="primary">ログイン</button>
+  </form>
+  <p class="hint">デモ用アカウント: tanaka / password</p>
+</div>
+{% endblock %}

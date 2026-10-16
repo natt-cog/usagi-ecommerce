@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | うさぎマーケット{% endblock %}
+{% block content %}
+<div class="detail">
+  <div class="icon big">{{ product.icon }}</div>
+  <div>
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <p class="price">¥{{ "{:,}".format(product.price) }}（税込）</p>
+    <form method="post" action="{{ url_for('cart_add', product_id=product.id) }}">
+      <input type="number" name="quantity" value="1" min="1" class="qty">
+      <button type="submit" class="primary">カートに入れる</button>
+    </form>
+    <p><a href="{{ url_for('manual', file=product.manual) }}">📄 取扱説明書を見る</a></p>
+  </div>
+</div>
+
+<h3>レビュー</h3>
+{% if user %}
+<form method="post" action="{{ url_for('add_review', product_id=product.id) }}" class="review-form">
+  <select name="rating">
+    {% for i in range(5, 0, -1) %}<option value="{{ i }}">{{ "★" * i }}</option>{% endfor %}
+  </select>
+  <input type="text" name="comment" placeholder="商品の感想を書いてください" required>
+  <button type="submit">投稿する</button>
+</form>
+{% else %}
+<p><a href="{{ url_for('login') }}">ログイン</a>するとレビューを投稿できます。</p>
+{% endif %}
+<ul class="reviews">
+  {% for r in reviews %}
+  <li><span class="stars">{{ "★" * r.rating }}</span> {{ r.comment|safe }} <small>— {{ r.display_name }}</small></li>
+  {% else %}
+  <li>まだレビューはありません。</li>
+  {% endfor %}
+</ul>
+{% endblock %}

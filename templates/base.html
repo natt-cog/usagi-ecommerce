@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}うさぎマーケット{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="{{ url_for('index') }}">🐰 うさぎマーケット</a>
+    <form class="search" action="{{ url_for('index') }}">
+      <input type="text" name="q" placeholder="商品をさがす" value="{{ q or '' }}">
+      <button type="submit">検索</button>
+    </form>
+    <nav>
+      <a href="{{ url_for('cart') }}">🛒 カート ({{ cart_count }})</a>
+      {% if user %}
+        <a href="{{ url_for('orders') }}">注文履歴</a>
+        {% if user.is_admin %}<a href="{{ url_for('admin') }}">管理画面</a>{% endif %}
+        <span class="who">{{ user.display_name }} さん</span>
+        <a href="{{ url_for('logout') }}">ログアウト</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">ログイン</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">© うさぎマーケット — セキュリティデモ用アプリ</footer>
+</body>
+</html>

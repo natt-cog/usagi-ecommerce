@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}カート | うさぎマーケット{% endblock %}
+{% block content %}
+<h2>ショッピングカート</h2>
+{% if items %}
+<table class="table">
+  <tr><th>商品</th><th>単価</th><th>数量</th><th>小計</th></tr>
+  {% for i in items %}
+  <tr><td>{{ i.product.icon }} {{ i.product.name }}</td><td>¥{{ "{:,}".format(i.product.price) }}</td>
+      <td>{{ i.quantity }}</td><td>¥{{ "{:,}".format(i.subtotal) }}</td></tr>
+  {% endfor %}
+  <tr class="total"><td colspan="3">合計</td><td>¥{{ "{:,}".format(total) }}</td></tr>
+</table>
+<form method="post" action="{{ url_for('checkout') }}" class="box">
+  <label>お届け先住所<input type="text" name="address" required placeholder="東京都千代田区..."></label>
+  <button type="submit" class="primary">注文を確定する</button>
+</form>
+{% else %}
+<p>カートは空です。<a href="{{ url_for('index') }}">お買い物を続ける</a></p>
+{% endif %}
+{% endblock %}
