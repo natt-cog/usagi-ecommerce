@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}注文 #{{ order.id }} | うさぎマーケット{% endblock %}
+{% block content %}
+<h2>注文 #{{ order.id }}</h2>
+<p>ご注文者: {{ order.display_name }} 様<br>お届け先: {{ order.address }}<br>注文日時: {{ order.created_at }}</p>
+<table class="table">
+  <tr><th>商品</th><th>単価</th><th>数量</th></tr>
+  {% for i in items %}
+  <tr><td>{{ i.icon }} {{ i.name }}</td><td>¥{{ "{:,}".format(i.price) }}</td><td>{{ i.quantity }}</td></tr>
+  {% endfor %}
+  <tr class="total"><td colspan="2">合計</td><td>¥{{ "{:,}".format(order.total) }}</td></tr>
+</table>
+{% endblock %}

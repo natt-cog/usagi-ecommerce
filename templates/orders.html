@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}注文履歴 | うさぎマーケット{% endblock %}
+{% block content %}
+<h2>注文履歴</h2>
+<table class="table">
+  <tr><th>注文番号</th><th>注文日時</th><th>合計</th><th></th></tr>
+  {% for o in orders %}
+  <tr><td>#{{ o.id }}</td><td>{{ o.created_at }}</td><td>¥{{ "{:,}".format(o.total) }}</td>
+      <td><a href="{{ url_for('order_detail', order_id=o.id) }}">詳細</a></td></tr>
+  {% else %}
+  <tr><td colspan="4">注文はまだありません。</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

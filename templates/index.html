@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% if q %}
+  <h2>「{{ q|safe }}」の検索結果（{{ products|length }}件）</h2>
+{% else %}
+  <h2>おすすめ商品</h2>
+{% endif %}
+<div class="grid">
+  {% for p in products %}
+  <a class="card" href="{{ url_for('product_detail', product_id=p.id) }}">
+    <div class="icon">{{ p.icon }}</div>
+    <div class="name">{{ p.name }}</div>
+    <div class="price">¥{{ "{:,}".format(p.price) }}</div>
+  </a>
+  {% else %}
+  <p>該当する商品はありません。</p>
+  {% endfor %}
+</div>
+{% endblock %}

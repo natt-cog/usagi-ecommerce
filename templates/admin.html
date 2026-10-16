@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}管理画面 | うさぎマーケット{% endblock %}
+{% block content %}
+<h2>管理画面</h2>
+<div class="stats">
+  <div><b>{{ stats.users }}</b>会員数</div>
+  <div><b>{{ stats.orders }}</b>注文数</div>
+  <div><b>¥{{ "{:,}".format(stats.sales) }}</b>売上合計</div>
+</div>
+<h3>配送業者サーバー 疎通確認</h3>
+<form method="post" class="review-form">
+  <input type="text" name="host" placeholder="例: delivery.example.com" required>
+  <button type="submit">確認する</button>
+</form>
+{% if result is not none %}<pre class="result">{{ result }}</pre>{% endif %}
+{% endblock %}
