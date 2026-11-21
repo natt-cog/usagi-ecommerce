@@ -61,6 +61,24 @@ def test_cart_and_checkout(client):
     assert "カート (0)" in html
 
 
+def test_cart_add_rejects_non_positive_quantity(client):
+    login(client)
+    for qty in ("-1", "0", "abc"):
+        assert client.post("/cart/add/1", data={"quantity": qty}).status_code == 400
+    assert "カート (0)" in client.get("/cart").get_data(as_text=True)
+
+
+def test_checkout_rejects_negative_quantity_in_cart(client):
+    import base64
+    import pickle
+    login(client)
+    client.set_cookie("localhost", "cart", base64.b64encode(pickle.dumps({1: -1})).decode())
+    res = client.post("/checkout", data={"address": "東京都"})
+    assert res.status_code == 400
+    html = client.get("/orders").get_data(as_text=True)
+    assert "¥-" not in html
+
+
 def test_orders_requires_login(client):
     res = client.get("/orders")
     assert res.status_code == 302
