@@ -15,6 +15,16 @@ def test_search_products(client):
     assert "にんじんクッキー" not in html
 
 
+def test_search_rejects_sql_injection(client):
+    payload = "' UNION SELECT id,username,password,0,'x','x' FROM users --"
+    res = client.get("/", query_string={"q": payload})
+    assert res.status_code == 200
+    html = res.get_data(as_text=True)
+    assert "admin" not in html
+    assert "tanaka" not in html
+    assert "5f4dcc3b5aa765d61d8327deb882cf99" not in html
+
+
 def test_product_detail(client):
     res = client.get("/products/2")
     assert res.status_code == 200

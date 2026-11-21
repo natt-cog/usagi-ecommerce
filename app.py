@@ -100,8 +100,11 @@ def index():
     q = request.args.get("q", "")
     db = get_db()
     if q:
-        sql = f"SELECT * FROM products WHERE name LIKE '%{q}%' OR description LIKE '%{q}%'"
-        products = db.execute(sql).fetchall()
+        pattern = f"%{q}%"
+        products = db.execute(
+            "SELECT * FROM products WHERE name LIKE ? OR description LIKE ?",
+            (pattern, pattern),
+        ).fetchall()
     else:
         products = db.execute("SELECT * FROM products").fetchall()
     return render_template("index.html", products=products, q=q)
