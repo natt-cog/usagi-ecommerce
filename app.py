@@ -172,8 +172,14 @@ def cart():
 
 @app.route("/cart/add/<int:product_id>", methods=["POST"])
 def cart_add(product_id):
+    try:
+        quantity = int(request.form.get("quantity", 1))
+    except ValueError:
+        abort(400)
+    if quantity < 1:
+        abort(400)
     cart = load_cart()
-    cart[product_id] = cart.get(product_id, 0) + int(request.form.get("quantity", 1))
+    cart[product_id] = cart.get(product_id, 0) + quantity
     return save_cart(redirect(url_for("cart")), cart)
 
 
@@ -185,6 +191,8 @@ def checkout():
     cart = load_cart()
     if not cart:
         return redirect(url_for("cart"))
+    if any(not isinstance(qty, int) or qty < 1 for qty in cart.values()):
+        abort(400)
     db = get_db()
     total = 0
     lines = []
